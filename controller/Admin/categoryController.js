@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const { client } = require("../../utils/dbConfige");
 
 const dataBase = client.db("library-room");
@@ -25,4 +26,15 @@ const getAllCategory = async (req, res) => {
   const category = await Categorys.find().toArray();
   res.send(category);
 };
-module.exports = { createCategory, getAllCategory };
+const deleteCategory = async (req, res) => {
+  const id = req.params.id;
+
+  const query = { _id: new ObjectId(id) };
+
+  const Categorys = dataBase.collection("categorys");
+
+  const result = await Categorys.deleteOne(query);
+  res.send({ success: true });
+};
+
+module.exports = { createCategory, getAllCategory, deleteCategory };

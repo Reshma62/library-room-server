@@ -5,8 +5,10 @@ const _ = express.Router();
 const {
   createCategory,
   getAllCategory,
-} = require("../../controller/Admin/adminController");
+  deleteCategory,
+} = require("../../controller/Admin/categoryController");
 
-_.post("/create-category", upload.single("image"), createCategory);
 _.get("/getall-category", getAllCategory);
+_.post("/create-category", upload.single("image"), createCategory);
+_.delete("/delete-category/:id", deleteCategory);
 module.exports = _;
