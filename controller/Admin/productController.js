@@ -11,10 +11,24 @@ const createBook = async (req, res) => {
   res.status(200).send(result);
 };
 const getAllBooks = async (req, res) => {
-  const query = {};
+  let query = {};
+  const reqcategory = req.query?.category;
+  const page = parseInt(req.query.page);
+  const size = parseInt(req.query.size);
+  console.log("page is", page, "size is", size);
+  const skipBook = page * size;
+  console.log(skipBook);
+  if (reqcategory) {
+    query = { category: reqcategory };
+  }
   const books = dataBase.collection("books");
-  const result = await books.find(query).toArray();
+  const result = await books.find(query).skip(skipBook).limit(size).toArray();
   res.status(200).send(result);
+};
+const getAllBooksCount = async (req, res) => {
+  const books = dataBase.collection("books");
+  const result = await books.estimatedDocumentCount();
+  res.status(200).send({ count: result });
 };
 const getSingleBookDetails = async (req, res) => {
   const id = req.params.id;
@@ -25,19 +39,22 @@ const getSingleBookDetails = async (req, res) => {
 };
 const updateQuantity = async (req, res) => {
   const id = req.params.id;
-  const userReqEmail = req.query?.email;
+  const returnBook = req.query?.returnBook;
 
   // find all books
   const books = dataBase.collection("books");
   const filter = { _id: new ObjectId(id) };
   const findQuantity = await books.findOne(filter);
   const prevQuantity = parseInt(findQuantity.quantity);
-  // find borrow quantity
-  const borrowBook = dataBase.collection("borrowBook");
-  const existQuery = { userEmail: userReqEmail, bookId: findQuantity._id };
-  const existingBorrowBook = await borrowBook.findOne(existQuery);
+  console.log(findQuantity);
 
-  const newQuantity = prevQuantity - 1;
+  let newQuantity;
+
+  if (returnBook) {
+    newQuantity = prevQuantity + 1;
+  } else {
+    newQuantity = prevQuantity - 1;
+  }
   const updateDoc = {
     $set: {
       quantity: newQuantity.toString(),
@@ -53,4 +70,5 @@ module.exports = {
   getAllBooks,
   getSingleBookDetails,
   updateQuantity,
+  getAllBooksCount,
 };
