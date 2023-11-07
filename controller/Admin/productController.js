@@ -9,4 +9,10 @@ const createProduct = async (req, res) => {
   const result = await books.insertOne(body);
   res.status(200).send(result);
 };
-module.exports = { createProduct };
+const getAllProducts = async (req, res) => {
+  const query = {};
+  const books = dataBase.collection("books");
+  const result = await books.find(query).toArray();
+  res.status(200).send(result);
+};
+module.exports = { createProduct, getAllProducts };
