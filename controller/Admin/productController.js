@@ -25,6 +25,7 @@ const getSingleBookDetails = async (req, res) => {
 };
 const updateQuantity = async (req, res) => {
   const id = req.params.id;
+  const userReqEmail = req.query?.email;
 
   // find all books
   const books = dataBase.collection("books");
@@ -33,19 +34,18 @@ const updateQuantity = async (req, res) => {
   const prevQuantity = parseInt(findQuantity.quantity);
   // find borrow quantity
   const borrowBook = dataBase.collection("borrowBook");
-  const existQuery = { bookId: id };
+  const existQuery = { userEmail: userReqEmail, bookId: findQuantity._id };
   const existingBorrowBook = await borrowBook.findOne(existQuery);
+
   const newQuantity = prevQuantity - 1;
   const updateDoc = {
     $set: {
       quantity: newQuantity.toString(),
     },
   };
-  if (existingBorrowBook) {
-    return;
-  }
+
   const result = await books.updateOne(filter, updateDoc);
-  res.send({ result });
+  return res.send(result);
 };
 
 module.exports = {

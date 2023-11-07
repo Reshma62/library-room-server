@@ -3,10 +3,11 @@ const app = express();
 require("dotenv").config();
 var cors = require("cors");
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 const Routes = require("./routes");
 const { run } = require("./utils/dbConfige");
 const path = require("path");
+const { addToCart } = require("./controller/User/userController");
 run();
 //middleware
 app.use(cors());
