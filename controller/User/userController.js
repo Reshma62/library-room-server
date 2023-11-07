@@ -28,5 +28,12 @@ const getBorrowBook = async (req, res) => {
 
   res.status(200).send(result);
 };
+const retrunBook = async (req, res) => {
+  const id = req.params.id;
+  const filter = { _id: new ObjectId(id) };
+  const borrowBook = dataBase.collection("borrowBook");
+  const result = await borrowBook.deleteOne(filter);
+  res.send(result);
+};
 
-module.exports = { borrowBook, getBorrowBook };
+module.exports = { borrowBook, getBorrowBook, retrunBook };
