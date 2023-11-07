@@ -1,12 +1,17 @@
 const express = require("express");
-const upload = require("../../middleware/multer");
+
 const {
-  createProduct,
-  getAllProducts,
+  createBook,
+  getAllBooks,
+  getSingleBookDetails,
+  updateQuantity,
 } = require("../../controller/Admin/productController");
 const _ = express.Router();
 
-_.get("/getall-product", getAllProducts);
-_.post("/create-product", upload.single("image"), createProduct);
-_.delete("/delete-product/:id");
+_.get("/getall-books", getAllBooks);
+_.get("/get-single-book/:id", getSingleBookDetails);
+_.post("/create-book", createBook);
+_.patch("/update-quantity/:id", updateQuantity);
+
+_.delete("/delete-book/:id");
 module.exports = _;

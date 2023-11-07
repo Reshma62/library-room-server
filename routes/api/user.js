@@ -1,6 +1,5 @@
 const express = require("express");
+const { borrowBook } = require("../../controller/User/userController");
 const _ = express.Router();
-_.get("/", (req, res) => {
-  res.send({ message: "successfully" });
-});
+_.post("/borrow-book", borrowBook);
 module.exports = _;
