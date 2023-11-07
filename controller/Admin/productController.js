@@ -64,6 +64,15 @@ const updateQuantity = async (req, res) => {
   const result = await books.updateOne(filter, updateDoc);
   return res.send(result);
 };
+const sortingQuantity = async (req, res) => {
+  const sort = req.query.sort;
+  const returnBook = req.query?.returnBook;
+
+  // find all books
+  const books = dataBase.collection("books");
+  const results = await books.find().sort(sort).toArray;
+  res.send(results);
+};
 
 module.exports = {
   createBook,
@@ -71,4 +80,5 @@ module.exports = {
   getSingleBookDetails,
   updateQuantity,
   getAllBooksCount,
+  sortingQuantity,
 };
