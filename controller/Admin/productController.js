@@ -74,6 +74,29 @@ const sortingQuantity = async (req, res) => {
   res.send(results);
 };
 
+const updateBooks = async (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+  const books = dataBase.collection("books");
+
+  const query = { _id: new ObjectId(id) };
+  const filter = await books.findOne(query);
+  const updateDoc = {
+    $set: {
+      bookName: body.bookName,
+      authorName: body.authorName,
+      rating: body.rating,
+      category: body.category,
+      bookPhoto: body.bookPhoto,
+      description: body.description,
+      quantity: body.quantity,
+    },
+  };
+
+  const result = await books.updateOne(filter, updateDoc);
+  return res.send(result);
+};
+
 module.exports = {
   createBook,
   getAllBooks,
@@ -81,4 +104,5 @@ module.exports = {
   updateQuantity,
   getAllBooksCount,
   sortingQuantity,
+  updateBooks,
 };
