@@ -9,15 +9,21 @@ const accessToken = async (req, res) => {
   res
     .cookie("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
     })
     .send({ success: true, token });
 };
 const deleteToken = async (req, res) => {
   const email = req.body;
 
-  res.clearCookie("token", { maxAge: 0 }).send({ success: true });
+  res
+    .clearCookie("token", {
+      maxAge: 0,
+      secure: process.env.NODE_ENV === "production" ? true : false,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+    })
+    .send({ success: true });
 };
 const borrowBook = async (req, res) => {
   const body = req.body;
