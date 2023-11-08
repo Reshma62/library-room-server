@@ -1,8 +1,24 @@
 const { ObjectId } = require("mongodb");
 const { client } = require("../../utils/dbConfige");
-
+const jwt = require("jsonwebtoken");
 const dataBase = client.db("library-room");
+const accessToken = async (req, res) => {
+  const email = req.body;
+  console.log(email);
+  const token = jwt.sign(email, process.env.SECERET_KEY, { expiresIn: "10h" });
+  res
+    .cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    })
+    .send({ success: true, token });
+};
+const deleteToken = async (req, res) => {
+  const email = req.body;
 
+  res.clearCookie("token", { maxAge: 0 }).send({ success: true });
+};
 const borrowBook = async (req, res) => {
   const body = req.body;
   const borrowBook = dataBase.collection("borrowBook");
@@ -19,14 +35,15 @@ const borrowBook = async (req, res) => {
 const getBorrowBook = async (req, res) => {
   let query = {};
 
-  if (req.query?.email) {
+  if (req?.query?.email) {
     query = { userEmail: req.query.email };
   }
-  const borrowBook = dataBase.collection("borrowBook");
 
-  const result = await borrowBook.find(query).toArray();
-
-  res.status(200).send(result);
+  if (req?.user?.email === req?.query?.email) {
+    const borrowBook = dataBase.collection("borrowBook");
+    const result = await borrowBook.find(query).toArray();
+    res.status(200).send(result);
+  }
 };
 const retrunBook = async (req, res) => {
   const id = req.params.id;
@@ -43,4 +60,11 @@ const readBook = async (req, res) => {
   res.send(result);
 };
 
-module.exports = { borrowBook, getBorrowBook, retrunBook, readBook };
+module.exports = {
+  borrowBook,
+  getBorrowBook,
+  retrunBook,
+  readBook,
+  accessToken,
+  deleteToken,
+};

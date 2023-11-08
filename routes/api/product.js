@@ -1,5 +1,7 @@
 const express = require("express");
-
+const jwt = require("jsonwebtoken");
+const verifiToken = require("../../middleware/verifiToken");
+const _ = express.Router();
 const {
   createBook,
   getAllBooks,
@@ -9,11 +11,10 @@ const {
   sortingQuantity,
   updateBooks,
 } = require("../../controller/Admin/productController");
-const _ = express.Router();
 
-_.get("/getall-books", getAllBooks);
-_.get("/books-count", getAllBooksCount);
-_.get("/get-single-book/:id", getSingleBookDetails);
+_.get("/getall-books", verifiToken, getAllBooks);
+_.get("/books-count", verifiToken, getAllBooksCount);
+_.get("/get-single-book/:id", verifiToken, getSingleBookDetails);
 _.post("/create-book", createBook);
 _.patch("/update-quantity/:id", updateQuantity);
 _.get("/sort-book", sortingQuantity);
