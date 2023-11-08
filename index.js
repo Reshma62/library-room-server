@@ -13,14 +13,9 @@ run();
 
 //middlewa
 
-const corsOptions = {
-  origin: ["http://localhost:5173", "https://library-room-20afe.web.app"],
-  credentials: true,
-};
-
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["https://library-room-20afe.web.app", "http://localhost:5173"],
     credentials: true,
   })
 );

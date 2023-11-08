@@ -13,7 +13,7 @@ const {
 } = require("../../controller/Admin/productController");
 
 _.get("/getall-books", verifiToken, getAllBooks);
-_.get("/books-count", verifiToken, getAllBooksCount);
+_.get("/books-count", getAllBooksCount);
 _.get("/get-single-book/:id", verifiToken, getSingleBookDetails);
 _.post("/create-book", createBook);
 _.patch("/update-quantity/:id", updateQuantity);
