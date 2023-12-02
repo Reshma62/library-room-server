@@ -15,7 +15,6 @@ const getAllBooks = async (req, res) => {
   const reqcategory = req.query?.category;
   const page = parseInt(req.query.page);
   const size = parseInt(req.query.size);
-  console.log("page is", page, "size is", size);
   const skipBook = page * size;
   console.log(skipBook);
   if (reqcategory) {
